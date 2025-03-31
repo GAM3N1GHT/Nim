@@ -13,4 +13,19 @@ public class NimComputer
     {
         return numTiles;
     }
+
+    public void subtract(int n)
+    {
+        
+    }
+
+    public boolean getTurn()
+    {
+        return turn;
+    }
+
+    public void nextTurn()
+    {
+        turn = !turn;
+    }
 }
