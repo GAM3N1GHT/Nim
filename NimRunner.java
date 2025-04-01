@@ -21,18 +21,24 @@ public class NimRunner extends JFrame
     private static MoveableTile heldTile;
 	public static MoveableTile[] tiles;
 	public static NimComputer nimComp;
+	public static NimEnemy enemy;
 	public static Highlighted highlighted;
+	public static int tooManyCool = -1;
+	public static int enemyTurn = -1;
+	public static boolean gameWon = false;
 
 	public static boolean mouseHeld = false;
 
     MouseEvent me = new MouseEvent();
+	Font stringFont = new Font( "Times New Roman", Font.PLAIN, 18);
 
 	
-	//MoveableTile test2 = new MoveableTile(200, 100, 1);
-	GraphicButton PlayBtn = new GraphicButton(200, 600, 200, 80, "Play", 150, 0, 150, 255, 255, 255, "Double", 0, 30);
+	GraphicButton SinglePlayerBtn = new GraphicButton(200, 600, 200, 80, "Single", 150, 0, 150, 255, 255, 255, "Single", 0, 30);
+	GraphicButton MultiPlayerBtn = new GraphicButton(400, 600, 200, 80, "Multi", 150, 0, 150, 255, 255, 255, "Double", 0, 30);
 	GraphicButton QuitBtn = new GraphicButton(600, 600, 200, 80, "Quit", 150, 0, 150, 255, 255, 255, "Quit", 0, 30);
 
-	GraphicButton TestBtn = new GraphicButton(600, 600, 200, 80, "Test", 150, 0, 150, 255, 255, 255, "Test", 1, 30);
+	GraphicButton SubmitBtn = new GraphicButton(screenWidth - 414, 600, 200, 80, "Submit", 150, 0, 150, 255, 255, 255, "Submit", 1, 30);
+	GraphicButton HomeBtn = new GraphicButton(200, 600, 200, 80, "Home", 150, 0, 150, 255, 255, 255, "HomeScreen", 1, 30);
 
 
 
@@ -84,6 +90,63 @@ public class NimRunner extends JFrame
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			
+			if (screenNum == 0)
+			{
+				stringFont = new Font("Times New Roman", Font.PLAIN, 100);
+				g2.setFont(stringFont);
+				g.setColor(new Color(255,255,255));
+				g2.drawString("N I M", (screenWidth/2)-135, screenHeight/4);
+				stringFont = new Font("Times New Roman", Font.PLAIN, 18);
+				g2.setFont(stringFont);
+			}
+			else if (screenNum == 1)
+			{
+				if (enemyTurn >= 0)
+				{
+					enemy.play();
+				}
+
+				if (tooManyCool >= 0)
+				{
+					g.setColor(new Color(255,255,255));
+					g2.drawString("Too many tiles.", 300, 500);
+					tooManyCool--;
+				}
+
+				if (gameWon)
+				{
+					if (nimComp.getTurn())
+					{
+						g.setColor(new Color(255,255,255));
+						g2.drawString("Red Wins", 300, 500);
+					}
+					else
+					{
+						g.setColor(new Color(255,255,255));
+						g2.drawString("Blue Wins", 500, 500);
+					}
+				}
+				else
+				{
+					if (nimComp.getTurn())
+					{
+						g.setColor(new Color(255,255,255));
+						g2.drawString("<-----", 300, 550);
+					}
+					else
+					{
+						g.setColor(new Color(255,255,255));
+						g2.drawString("----->", 500, 550);
+					}
+				}
+				
+
+				g.setColor(new Color(200, 0, 0));
+				g.fillRect(0, 0, 175, screenHeight);
+				g.setColor(new Color(0, 0, 200));
+				g.fillRect(screenWidth-189, 0, 175, screenHeight);
+			}
+
 			//if Tile held then make it follow the mouse and draw selected box
             if (isTileHeld)
             {
@@ -91,17 +154,6 @@ public class NimRunner extends JFrame
                 g2.setColor(new Color(255,0,255));
 				g2.drawRect(heldTile.getX(), heldTile.getY(), 30, 30);
             }
-
-			if (screenNum == 1)
-			{
-				//Play
-
-
-				g.setColor(new Color(200, 0, 0));
-				g.fillRect(0, 0, 175, screenHeight);
-				g.setColor(new Color(0, 0, 200));
-				g.fillRect(screenWidth-189, 0, 175, screenHeight);
-			}
 
             MoveableTile.drawAll(g, g2);
 			GraphicButton.drawAll(g, g2);
