@@ -30,7 +30,7 @@ public class MoveableTile
 
     public boolean clickCheck(int xClick, int yClick)
     {
-        if(this.screenNum == NimRunner.screenNum && (xClick >= x && xClick <= x+30 && yClick >= y && yClick <= y+30))
+        if((this.screenNum == NimRunner.screenNum || this.screenNum == -1) && (xClick >= x && xClick <= x+30 && yClick >= y && yClick <= y+30))
         {
             return true;
         }
@@ -96,4 +96,3 @@ public class MoveableTile
         }
     }
 }
-
