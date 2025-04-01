@@ -22,7 +22,7 @@ public class MouseEvent implements MouseListener{
                     {
                         NimRunner.tiles[i] = new MoveableTile(250 + ((i%10)*50), 100 + ((i-(i%10))*5), 1);
                     }
-                    // Make enemy
+                    NimRunner.enemy = new NimEnemy();
                     break;
                 case "Double":
                     NimRunner.screenNum = 1;
@@ -36,60 +36,28 @@ public class MouseEvent implements MouseListener{
                 case "HomeScreen":
                     NimRunner.screenNum = 0;
                     NimRunner.nimComp = null;
+                    MoveableTile.allTiles = new MoveableTile[0];
+                    NimRunner.gameWon = false;
+                    NimRunner.tooManyCool = -1;
+                    NimRunner.highlighted = null;
+                    NimRunner.enemy = null;
+                    NimRunner.enemyTurn = -1;
                     break;
                 case "Quit":
                     System.exit(0);
                     break;
-                case "Test":
-                    MoveableTile[] bombable = new MoveableTile[0];
-                    for (int i = 0; i<MoveableTile.allTiles.length; i++)
+                case "Submit":
+                    if (!(NimRunner.enemyTurn >= 0))
                     {
-                        if (NimRunner.nimComp.getTurn())
+                        NimRunner.nimComp.nim();
+                        if (NimRunner.enemy != null && !NimRunner.gameWon)
                         {
-                            if (MoveableTile.allTiles[i].getX() <= 175)
-                            {
-                                MoveableTile[] temp = new MoveableTile[bombable.length+1];
-                                for (int ii = 0; ii<bombable.length; ii++)
-                                {
-                                    temp[ii] = bombable[ii];
-                                }
-                                temp[bombable.length] = MoveableTile.allTiles[i];
-                                bombable = temp;
-                            }
+                            NimRunner.enemy.play();
                         }
-                        else
-                        {
-                            if (MoveableTile.allTiles[i].getX() >= NimRunner.screenWidth - 189)
-                            {
-                                MoveableTile[] temp = new MoveableTile[bombable.length+1];
-                                for (int ii = 0; ii<bombable.length; ii++)
-                                {
-                                    temp[ii] = bombable[ii];
-                                }
-                                temp[bombable.length] = MoveableTile.allTiles[i];
-                                bombable = temp;
-                            }
-                        }
-                    }
-                    System.out.println("Bomb: " + bombable.length + ", All: " + MoveableTile.allTiles.length/2);
-                    if (bombable.length < MoveableTile.allTiles.length/2)
-                    {
-                        NimRunner.nimComp.nextTurn();
-                        System.out.println("temp");
-                        // for (int i = bombable.length-1; i>=0; i--)
-                        // {
-                        //     for (int ii = MoveableTile.allTiles.length-1; ii>=0; ii--)
-                        //     {
-                        //         if (bombable[i] == MoveableTile.allTiles[ii])
-                        //         {
-                        //             // Get rid of the tile in both arrays
-                        //         }
-                        //     }
-                        // }
                     }
                     else
                     {
-                        System.out.println("Too many tiles");
+                        System.out.println("During Enemy Turn");
                     }
                     break;
                 default:
