@@ -4,7 +4,7 @@ import java.util.Calendar;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// WARNING: This project was made with no planning for the future so the code is garbage.
+// WARNING: This project was made with no planning for the future so the code is very spaghetti.
 //          The idea was: make something that works, it doesn't have to be easy to read because you are only going to use this once
 
 public class NimRunner extends JFrame
