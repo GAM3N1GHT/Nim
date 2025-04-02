@@ -1,10 +1,15 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// WARNING: This project was made with no planning for the future so the code is very spaghetti.
+// WARNING: This project was made with no planning for the future so the code is garbage.
 //          The idea was: make something that works, it doesn't have to be easy to read because you are only going to use this once
 
 public class NimRunner extends JFrame
@@ -26,6 +31,13 @@ public class NimRunner extends JFrame
 	public static int tooManyCool = -1;
 	public static int enemyTurn = -1;
 	public static boolean gameWon = false;
+
+	private static File folder = new File("ImageFiles");
+    private static File[] imgList = folder.listFiles();
+	public static BufferedImage explosion;
+	public static ArrayList<Integer> explosionTimers = new ArrayList<Integer>();
+	public static ArrayList<Integer> explosionX = new ArrayList<Integer>();
+	public static ArrayList<Integer> explosionY = new ArrayList<Integer>();
 
 	public static boolean mouseHeld = false;
 
@@ -51,7 +63,7 @@ public class NimRunner extends JFrame
     {
         //Sets up the screen
 		this.setSize(screenWidth, screenHeight);
-		this.setTitle("Video Editor");		
+		this.setTitle("Game of Nim");		
 		this.setLocationRelativeTo(null); //always in middle
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,6 +72,14 @@ public class NimRunner extends JFrame
 		screen = new Screen();
 		this.add(screen);
 		this.setVisible(true);
+
+		try 
+		{
+			explosion = ImageIO.read(imgList[0]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		
 		Long lastLong = (long) 0;
@@ -108,11 +128,17 @@ public class NimRunner extends JFrame
 
 				if (tooManyCool >= 0)
 				{
+					stringFont = new Font("Times New Roman", Font.PLAIN, 40);
+					g2.setFont(stringFont);
 					g.setColor(new Color(255,255,255));
 					g2.drawString("Too many tiles.", 300, 500);
 					tooManyCool--;
+					stringFont = new Font("Times New Roman", Font.PLAIN, 18);
+					g2.setFont(stringFont);
 				}
 
+				stringFont = new Font("Times New Roman", Font.PLAIN, 40);
+				g2.setFont(stringFont);
 				if (gameWon)
 				{
 					if (nimComp.getTurn())
@@ -139,12 +165,26 @@ public class NimRunner extends JFrame
 						g2.drawString("----->", 500, 550);
 					}
 				}
+				stringFont = new Font("Times New Roman", Font.PLAIN, 18);
+				g2.setFont(stringFont);
 				
 
 				g.setColor(new Color(200, 0, 0));
 				g.fillRect(0, 0, 175, screenHeight);
 				g.setColor(new Color(0, 0, 200));
 				g.fillRect(screenWidth-189, 0, 175, screenHeight);
+
+				for (int i = 0; i<explosionTimers.size(); i++)
+				{
+					g2.drawImage(explosion, explosionX.get(i), explosionY.get(i), 50, 50, screen);
+					explosionTimers.set(i, explosionTimers.get(i)-1);
+					if (explosionTimers.get(i) < 0)
+					{
+						explosionTimers.remove(i);
+						explosionX.remove(i);
+						explosionY.remove(i);
+					}
+				}
 			}
 
 			//if Tile held then make it follow the mouse and draw selected box
@@ -217,5 +257,12 @@ public class NimRunner extends JFrame
     public static void stopTile()
 	{
 		isTileHeld = false;
+	}
+
+	public static void selfDestruct(int x, int y)
+	{
+		explosionTimers.add(50);
+		explosionX.add(x);
+		explosionY.add(y);
 	}
 }
