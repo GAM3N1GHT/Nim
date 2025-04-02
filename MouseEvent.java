@@ -27,6 +27,10 @@ public class MouseEvent implements MouseListener{
                 case "Double":
                     NimRunner.screenNum = 1;
                     NimRunner.nimComp = new NimComputer();
+                    if (Math.random()>0.5)
+                    {
+                        NimRunner.nimComp.nextTurn();
+                    }
                     NimRunner.tiles = new MoveableTile[NimRunner.nimComp.getNumTiles()];
                     for (int i = 0; i<NimRunner.nimComp.getNumTiles(); i++)
                     {
