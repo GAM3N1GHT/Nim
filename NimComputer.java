@@ -63,6 +63,8 @@ public class NimComputer
                 {
                     if (bomb.get(i) == all.get(ii))
                     {
+                        //Do explosion at all.get(ii)
+                        NimRunner.selfDestruct(all.get(ii).getX()-10, all.get(ii).getY()-10);
                         all.remove(ii);
                     }
                 }
@@ -76,7 +78,7 @@ public class NimComputer
         }
         else if (bombable.length != 0)
         {
-            NimRunner.tooManyCool = 200;
+            NimRunner.tooManyCool = 100;
         }
         if (MoveableTile.allTiles.length == 0)
         {
@@ -88,11 +90,6 @@ public class NimComputer
     public int getNumTiles()
     {
         return numTiles;
-    }
-
-    public void subtract(int n)
-    {
-        
     }
 
     public boolean getTurn()
