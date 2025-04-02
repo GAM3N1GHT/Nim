@@ -5,12 +5,19 @@ public class NimEnemy
 
     public void play()
     {
+        if (MoveableTile.allTiles.length == 0)
+        {
+            NimRunner.nimComp.nextTurn();
+            NimRunner.enemyTurn = -1;
+            NimRunner.gameWon = true;
+            return;
+        }
         if (NimRunner.enemyTurn == -1)
         {
             deleteNum = solve();
-            NimRunner.enemyTurn = 50 + (deleteNum*30);
+            NimRunner.enemyTurn = 30 + (deleteNum*15) + 14;
         }
-        else if (NimRunner.enemyTurn > 50 && NimRunner.enemyTurn%30 == 0)
+        else if (NimRunner.enemyTurn > 30 && NimRunner.enemyTurn%15 == 0)
         {
             if (integer%2 == 1)
             {
@@ -28,6 +35,10 @@ public class NimEnemy
             for (int i = deleteNum; i<MoveableTile.allTiles.length; i++)
             {
                 temp[i-deleteNum] = MoveableTile.allTiles[i];
+            }
+            for (int i = 0; i<deleteNum; i++)
+            {
+                NimRunner.selfDestruct(MoveableTile.allTiles[i].getX()-10, MoveableTile.allTiles[i].getY()-10);
             }
             MoveableTile.allTiles = temp;
         }
